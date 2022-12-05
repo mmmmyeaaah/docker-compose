@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: 'docker'
+      POSTGRES_USER: 'adminn'
+      POSTGRES_PASSWORD: 'adminnpass'
+    # ports:
+    #   - "5555:5432"  
+    restart: unless-stopped
+    # volumes:
+    #   - ./pgdata:/var/lib/postgresql/data
+    #   - ./logs:/var/log
+    # hostname: postgres  
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G    
+  backend:
+    build: ./stocks_products
+    # command: [sh, -c, "python manage.py runserver 0.0.0.0:8000 && python manage.py migrate"]
+    command: python manage.py runserver 0.0.0.0:8000
+    # command: sh ./run.sh
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env  
+    volumes:
+      - ./app/:/usr/src/stocks_products/static/
+    depends_on:
+      - postgres
+  # nginx:
+  #   build: ./nginx
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./static:/usr/src/stocks_products/static/  
+  #   ports:
+  #     - "8080:80"
