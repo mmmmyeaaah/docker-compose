@@ -17,6 +17,5 @@ RUN chmod +x /usr/src/stocks_products/entrypoint.sh
 COPY . .
 
 RUN mkdir /usr/src/stocks_products/staticfiles
-# WORKDIR $APP_HOME
 
 ENTRYPOINT ["/usr/src/stocks_products/entrypoint.sh"]
